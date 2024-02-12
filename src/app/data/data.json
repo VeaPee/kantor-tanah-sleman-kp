@@ -1,0 +1,28 @@
+{
+    "Blanko": [
+        {
+            "title": "Jual Beli",
+            "dokumen": "dokumen/1.pdf"
+        },
+        {
+            "title": "Pewarisan",
+            "dokumen": "dokumen/test.pdf"
+        },
+        {
+            "title": "Tukar Menukar",
+            "dokumen": "dokumen/3.pdf"
+        },
+        {
+            "title": "Lelang",
+            "dokumen": "dokumen/test.pdf"
+        },
+        {
+            "title": "Hibah",
+            "dokumen": "dokumen/5.pdf"
+        },
+        {
+            "title": "Pembagian Hak Bersama",
+            "dokumen": "dokumen/6.pdf"
+        }
+    ]
+}

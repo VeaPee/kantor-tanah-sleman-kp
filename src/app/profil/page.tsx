@@ -8,8 +8,8 @@ export default function Profil() {
             <Navbar />
             <div>
                 <iframe
-                    width="900"
-                    height="685"
+                    // width="560" height="315" 
+                    width="900" height="685"
                     src="https://www.youtube.com/embed/cc3YA-6i3w8?si=BuBAVynTZiKRO213&autoplay=1"
                     title="YouTube video player"
                     frameBorder="0"
