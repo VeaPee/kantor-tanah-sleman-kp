@@ -75,7 +75,7 @@ export default function Berkas() {
         printWindow.document.write(`
           <html>
             <head>
-              <title>Print</title>
+              <title>Print PDF</title>
             </head>
             <body>
               <div>

@@ -1,13 +1,19 @@
 "use client";
-
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../navbar";
 import JsonData from "../data/data.json";
+import { Pagination, ThemeProvider, createTheme } from "@mui/material";
 
 const LoadingIndicator = () => <div>Loading...</div>;
 
-const DocumentBox = ({ title, onClick }: { title: string, onClick: () => void }) => (
+const DocumentBox = ({
+  title,
+  onClick,
+}: {
+  title: string;
+  onClick: () => void;
+}) => (
   <div
     style={{
       backgroundColor: "white",
@@ -16,8 +22,8 @@ const DocumentBox = ({ title, onClick }: { title: string, onClick: () => void })
       outline: "2px solid black",
       textAlign: "center",
       cursor: "pointer",
-      width: "30%", // Mengatur lebar agar ada 3 item per baris
-      margin: "10px", // Memberikan margin agar item tidak saling menumpuk
+      width: "30%",
+      margin: "10px",
     }}
     onClick={onClick}
   >
@@ -27,47 +33,92 @@ const DocumentBox = ({ title, onClick }: { title: string, onClick: () => void })
   </div>
 );
 
+// Create a custom theme with increased pagination size
+const theme = createTheme({
+  components: {
+    MuiPagination: {
+      styleOverrides: {
+        root: {
+          "& .MuiPaginationItem-root": {
+            fontSize: "1.5rem", // Adjust the font size as needed
+            minWidth: "48px", // Adjust the minimum width as needed
+            minHeight: "48px", // Adjust the minimum height as needed
+          },
+        },
+      },
+    },
+  },
+});
+
 export default function Blanko() {
   const router = useRouter();
   const [selectedPdf, setSelectedPdf] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const documentsPerPage = 9;
+
+  const startIdx = (currentPage - 1) * documentsPerPage;
+  const endIdx = startIdx + documentsPerPage;
+
+  const totalPages = Math.ceil(JsonData.Blanko.length / documentsPerPage);
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    newPage: number
+  ) => {
+    setCurrentPage(newPage);
+  };
 
   const handleBoxClick = (dokumen: any) => {
     setSelectedPdf(dokumen);
     const newUrl = new URL(window.location.href);
-    newUrl.pathname = "/berkas"; // Update the pathname
+    newUrl.pathname = "/berkas";
     newUrl.searchParams.set("selectedPdf", dokumen);
     router.push(newUrl.pathname + "?" + newUrl.searchParams.toString());
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Navbar />
+    <ThemeProvider theme={theme}>
       <div
         style={{
           display: "flex",
-          flexWrap: "wrap", // Menyusun elemen dalam baris baru jika tidak muat pada baris saat ini
-          justifyContent: "center", // Menyusun elemen di tengah
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        {JsonData.Blanko ? (
-          JsonData.Blanko.map((d) => (
-            <DocumentBox
-              key={d.title}
-              title={d.title}
-              onClick={() => handleBoxClick(d.dokumen)}
-            />
-          ))
-        ) : (
-          <LoadingIndicator />
-        )}
+        <Navbar />
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            marginBottom: "50px",
+            marginTop: "30px",
+          }}
+        >
+          {JsonData.Blanko ? (
+            JsonData.Blanko.slice(startIdx, endIdx).map((d) => (
+              <DocumentBox
+                key={d.title}
+                title={d.title}
+                onClick={() => handleBoxClick(d.dokumen)}
+              />
+            ))
+          ) : (
+            <LoadingIndicator />
+          )}
+        </div>
+        <div>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+            size="large"
+            sx={{ fontSize: "1.5rem" }}
+          />
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
