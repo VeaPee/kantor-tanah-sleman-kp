@@ -1,17 +1,3 @@
-/* body {
-    margin: 0;
-    background-color: #525659;
-    font-family:
-      Segoe UI,
-      Tahoma,
-      sans-serif;
-  } */
-  
-  .Example input,
-  .Example button {
-    font: inherit;
-  }
-  
   .Example header {
     background-color: #323639;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);

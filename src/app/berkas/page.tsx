@@ -67,16 +67,43 @@ export default function Berkas() {
     setNumPages(nextNumPages);
   }
 
+  const handlePrint = () => {
+    if (isClientSide) {
+      const printWindow = window.open('', '_blank');
+      
+      if (printWindow) {
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Print</title>
+            </head>
+            <body>
+              <div>
+                <iframe width="100%" height="100%" src="${file}" frameborder="0"></iframe>
+              </div>
+            </body>
+          </html>
+        `);
+        
+        printWindow.document.close();
+      }
+    }
+  };
+
+  
   return (
     <div className="Example">
       <Navbar />
       <div className="Example__container">
+      <button onClick={handlePrint}>Print</button>
+
         <div className="Example__container__document" ref={setContainerRef}>
           <Document
             file={file}
-            onLoadSuccess={() => onDocumentLoadSuccess}
+            onLoadSuccess={onDocumentLoadSuccess}
             options={options}
-          >
+            
+          > 
             {Array.from(new Array(numPages), (el, index) => (
               <Page
                 key={`page_${index + 1}`}

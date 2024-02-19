@@ -19,6 +19,7 @@ export default function Navbar() {
                     display: "flex",
                     justifyContent: "center",
                     backgroundColor: "white", // Add your desired background color here
+                    zIndex: 1000
                 }}
             >
                 <a className="group rounded-lg border border-transparent px-5 py-4 transition-colors">
