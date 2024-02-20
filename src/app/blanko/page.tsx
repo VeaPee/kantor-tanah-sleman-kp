@@ -54,7 +54,7 @@ export default function Blanko() {
   const router = useRouter();
   const [selectedPdf, setSelectedPdf] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const documentsPerPage = 9;
+  const documentsPerPage = 15;
 
   const startIdx = (currentPage - 1) * documentsPerPage;
   const endIdx = startIdx + documentsPerPage;
@@ -92,8 +92,8 @@ export default function Blanko() {
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "center",
-            marginBottom: "50px",
-            marginTop: "30px",
+            marginBottom: "15px",
+            marginTop: "10px",
           }}
         >
           {JsonData.Blanko ? (
