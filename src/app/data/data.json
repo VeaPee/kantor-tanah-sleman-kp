@@ -228,5 +228,23 @@
             "title": "Perpanjangan Hak Milik Satuan Rumah Susun",
             "dokumen": "dokumen/test.pdf"
         }
+    ],
+    "Menu": [
+        {
+            "path": "/profil",
+            "label": "Profil"
+        },
+        {
+            "path": "/struktur",
+            "label": "Struktur"
+        },
+        {
+            "path": "/blanko",
+            "label": "Blanko Permohonan"
+        },
+        {
+            "path": "/syarat",
+            "label": "Syarat Permohonan"
+        }
     ]
 }
