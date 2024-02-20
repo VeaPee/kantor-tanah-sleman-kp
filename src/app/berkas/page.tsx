@@ -41,7 +41,6 @@ export default function Berkas() {
   const [file, setFile] = useState<PDFFile>(decodedPdf || "dokumen/test.pdf");
 
   useEffect(() => {
-    console.log(selectedPdf);
     if (decodedPdf) {
       setFile(decodedPdf);
     }
@@ -69,41 +68,40 @@ export default function Berkas() {
 
   const handlePrint = () => {
     if (isClientSide) {
-      const printWindow = window.open('', '_blank');
-      
+      const printWindow = window.open(file?.toString() || "");
+
       if (printWindow) {
-        printWindow.document.write(`
-          <html>
-            <head>
-              <title>Print PDF</title>
-            </head>
-            <body>
-              <div>
-                <iframe width="100%" height="100%" src="${file}" frameborder="0"></iframe>
-              </div>
-            </body>
-          </html>
-        `);
-        
-        printWindow.document.close();
+        printWindow.onload = () => {
+          printWindow.print();
+          setTimeout(() => {
+            printWindow.close();
+          }, 15000);
+        };
       }
     }
   };
 
-  
   return (
     <div className="Example">
       <Navbar />
       <div className="Example__container">
-      <button onClick={handlePrint}>Print</button>
+        <button
+          onClick={handlePrint}
+          className="group rounded-lg border border-black bg-white px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 mb-3 text-1xl font-semibold"
+          rel="noopener noreferrer"
+          style={{
+            marginTop: "20px",
+          }}
+        >
+          Print
+        </button>
 
         <div className="Example__container__document" ref={setContainerRef}>
           <Document
             file={file}
             onLoadSuccess={onDocumentLoadSuccess}
             options={options}
-            
-          > 
+          >
             {Array.from(new Array(numPages), (el, index) => (
               <Page
                 key={`page_${index + 1}`}
