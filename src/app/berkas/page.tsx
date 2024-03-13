@@ -2,7 +2,9 @@
 import { useEffect, useCallback, useState } from "react";
 import { useResizeObserver } from "@wojtekmaj/react-hooks";
 import { pdfjs, Document, Page } from "react-pdf";
+import { Link } from "react-router-dom";
 
+import { useRouter } from "next/navigation";
 import Navbar from "../navbar";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
@@ -34,7 +36,7 @@ function getQueryParam(name: string, url: string) {
 
 export default function Berkas() {
   const isClientSide = typeof window !== "undefined";
-
+  const router = useRouter();
   const searchParams = isClientSide ? window.location.search : "";
   const selectedPdf = getQueryParam("selectedPdf", searchParams);
   const decodedPdf = selectedPdf ? decodeURIComponent(selectedPdf) : null;
@@ -66,6 +68,13 @@ export default function Berkas() {
     setNumPages(nextNumPages);
   }
 
+  const handleDownload = () => {
+    const newUrl = new URL(window.location.href);
+    newUrl.pathname = "/qrcode";
+    newUrl.searchParams.set("selectedPdf", decodedPdf || "");
+    router.push(newUrl.pathname + "?" + newUrl.searchParams.toString());
+  };
+  
   const handlePrint = () => {
     if (isClientSide) {
       const printWindow = window.open(file?.toString() || "");
@@ -85,6 +94,16 @@ export default function Berkas() {
     <div className="Example">
       <Navbar />
       <div className="Example__container">
+      <button
+          onClick={handleDownload}
+          className="group rounded-lg border border-black bg-white px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 mb-3 text-1xl font-semibold"
+          rel="noopener noreferrer"
+          style={{
+            marginTop: "20px",
+          }}
+        >
+          Download
+        </button>
         <button
           onClick={handlePrint}
           className="group rounded-lg border border-black bg-white px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 mb-3 text-1xl font-semibold"
