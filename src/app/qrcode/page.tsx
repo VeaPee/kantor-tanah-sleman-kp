@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import QRCode from "qrcode.react";
 import Navbar from "../navbar";
+import JsonData from "../data/data.json";
 
 type PDFFile = string | File | null;
 
@@ -20,29 +21,27 @@ export default function Berkas() {
   const selectedPdf = getQueryParam("selectedPdf", searchParams);
   const decodedPdf = selectedPdf ? decodeURIComponent(selectedPdf) : null;
   const [file, setFile] = useState<PDFFile>(decodedPdf || "dokumen/test.pdf");
+  const [fileLink, setFileLink] = useState<string>("");
 
   useEffect(() => {
-    if (decodedPdf) {
-      setFile(decodedPdf);
+    // Find the matching link from the JSON data based on decodedPdf
+    const selectedBlanko = JsonData.Blanko.find((item: { dokumen: string }) => item.dokumen === decodedPdf);
+    if (selectedBlanko && selectedBlanko.link) {
+        // Fetch the PDF file from the link
+        const fetchPdf = async () => {
+            try {
+                const response = await fetch(selectedBlanko.link);
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                setFile(url);
+                setFileLink(selectedBlanko.link);
+            } catch (error) {
+                console.error("Error fetching PDF:", error);
+            }
+        };
+        fetchPdf();
     }
-  }, [decodedPdf, selectedPdf]);
-
-
-  useEffect(() => {
-    // Fetch the PDF file from the public folder
-    const fetchPdf = async () => {
-      try {
-        const response = await fetch(file ? file.toString() : ""); // Adjust the path as needed
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        setFile(url);
-      } catch (error) {
-        console.error("Error fetching PDF:", error);
-      }
-    };
-
-    fetchPdf();
-  }, []);
+  }, [decodedPdf]);
   
   return (
     <div className="Example">
@@ -52,11 +51,11 @@ export default function Berkas() {
           <>
             <QRCode
               style={{ marginBottom: "30px", marginTop: "50px" }}
-              value={file.toString()}
+              value={fileLink}
               size={400}
             />
-            <a href={file.toString()} download="test.pdf">
-              Download PDF
+            <a href={file.toString()} download={fileLink}>
+              Scan QR Ini Untuk Mengunduh Berkas
             </a>
           </>
         )}
